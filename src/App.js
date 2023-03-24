@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import InputField from "./components/Input";
+import Display from "./components/Display";
+import { useState } from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [toDoList, setTodoList] = useState([]);
+
+    const handleSave = (text) => {
+        setTodoList([
+            ...toDoList,
+            {
+                id: Math.random().toString(36).substr(2, 9),
+                text: text,
+                status: false,
+            },
+        ]);
+    };
+
+    function handleCompleteTask(changeId) {
+        setTodoList(
+            toDoList.map((item) =>
+                item.id === changeId ? { ...item, status: !item.status } : item
+            )
+        );
+    }
+
+    function handleDeleteBtn(deleteId) {
+        setTodoList(toDoList.filter((element) => element.id !== deleteId));
+    }
+
+    return (
+        <div className="App">
+            <h1>Todo List using JavaScript</h1>
+            <InputField handleSave={handleSave} />
+            <Display
+                toDoList={toDoList}
+                handleCompleteTask={handleCompleteTask}
+                handleDeleteBtn={handleDeleteBtn}
+            />
+        </div>
+    );
 }
 
 export default App;
